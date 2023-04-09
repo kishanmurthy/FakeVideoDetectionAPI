@@ -12,7 +12,7 @@ async def downloadYoutubeVideos(request_id, video_id):
     yt = yt.streams.filter(progressive=True, file_extension='mp4').order_by('resolution').asc().first()
     if not os.path.exists("videos/"):
         os.makedirs("videos/")
-    yt.download("videos/")
+    yt.download("videos/", filename="file.mp4")
     update_request_status(request_id, "DOWNLOADED")
 
 
@@ -21,9 +21,9 @@ async def downloadYoutubeShorts(request_id, video_id):
     base_url = "https://www.youtube.com/shorts/"
     yt = YouTube(base_url + video_id)
     yt = yt.streams.filter(progressive=True, file_extension='mp4').order_by('resolution').asc().first()
-    if not os.path.exists("shorts/"):
-        os.makedirs("shorts/")
-    yt.download("shorts/")
+    if not os.path.exists("videos/"):
+        os.makedirs("videos/")
+    yt.download("videos/", filename="file.mp4")
     update_request_status(request_id, "DOWNLOADED")
 
 # downloadYoutubeVideos("_fbq8RaKlxI")
