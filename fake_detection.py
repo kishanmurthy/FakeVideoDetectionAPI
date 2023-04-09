@@ -6,7 +6,7 @@ from flask import Flask, abort, jsonify, render_template, request
 from flask_cors import CORS
 
 from database_access import query_request_data, store_new_request
-from file_download import downloadYoutube
+from file_download import downloadYoutubeVideos, downloadYoutubeShorts
 
 app = Flask(__name__)
 CORS(app)
@@ -17,15 +17,25 @@ def application_start():
 
 @app.route('/detect_authenticity', methods=["POST"])
 def detect_authenticity():
-	av_link = request.json['url']
-	query_dict = {}
-	parse = urlparse(av_link)
-	for ele in parse.query.split('&'):
-		key, value = ele.split('=')
-		query_dict[key] = value 
-	downloadYoutube(query_dict['v'])
 	request_id = str(uuid.uuid4())
-	store_new_request(request_id, query_dict['v'])
+	av_link = request.json['url']
+	ytype = ""
+	video_id = ""
+	if "watch" in av_link:
+		ytype = "videos"
+		query_dict = {}
+		parse = urlparse(av_link)
+		for ele in parse.query.split('&'):
+			key, value = ele.split('=')
+			query_dict[key] = value 
+		video_id = query_dict['v']
+		downloadYoutubeVideos(video_id)
+	else:
+		ytype = "shorts"
+		video_id = av_link.rsplit('/', 1)[1]
+		print(video_id)
+		downloadYoutubeShorts(video_id)
+	store_new_request(request_id, ytype, video_id)
 	return jsonify({'resquest_id':request_id})
 
 @app.route('/get_status')
