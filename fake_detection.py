@@ -33,12 +33,12 @@ async def detect_authenticity():
 			key, value = ele.split('=')
 			query_dict[key] = value 
 		video_id = query_dict['v']
-		asyncio.create_task(downloadYoutubeVideos(video_id))
+		asyncio.create_task(downloadYoutubeVideos(request_id, video_id))
 
 	else:
 		ytype = "shorts"
 		video_id = av_link.rsplit('/', 1)[1]
-		asyncio.create_task(downloadYoutubeShorts(video_id))
+		asyncio.create_task(downloadYoutubeShorts(request_id, video_id))
 		
 	store_new_request(request_id, ytype, video_id)
 	return jsonify({'resquest_id':request_id})
