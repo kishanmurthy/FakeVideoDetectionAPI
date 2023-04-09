@@ -1,16 +1,18 @@
+import asyncio
 import random
 import uuid
 from urllib.parse import urlencode, urlparse
-
-#pip3 install flask==2.1.3
-#pip3 install aioflask
 
 from aioflask import Flask, abort, jsonify, render_template, request
 from flask_cors import CORS
 
 from database_access import query_request_data, store_new_request
-from file_download import downloadYoutubeVideos, downloadYoutubeShorts
-import asyncio
+from file_download import downloadYoutubeShorts, downloadYoutubeVideos
+
+#pip3 install flask==2.1.3
+#pip3 install aioflask
+
+
 
 app = Flask(__name__)
 CORS(app)
@@ -41,7 +43,7 @@ async def detect_authenticity():
 		asyncio.create_task(downloadYoutubeShorts(request_id, video_id))
 		
 	store_new_request(request_id, ytype, video_id)
-	return jsonify({'resquest_id':request_id})
+	return jsonify({'request_id':request_id})
 
 @app.route('/get_status')
 def get_status():
