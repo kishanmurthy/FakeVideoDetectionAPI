@@ -18,6 +18,12 @@ class UpdateRequests(object):
 		self.status = status
 		self.result = result
 
+class UpdateRequestsModel(object):
+	def __init__(self, model_data, status = "NA", result = "NA"):
+		self.model_data = model_data
+		self.status = status
+		self.result = result
+
 def store_new_request(request_id, type, link):
 	doc_ref = db.collection(u'requests').document(request_id)
 
@@ -27,6 +33,11 @@ def store_new_request(request_id, type, link):
 def update_request_status(request_id, status, result = "NA"):
 	doc_ref = db.collection(u'requests').document(request_id)
 	req = UpdateRequests(status=status, result = result)
+	doc_ref.set(req.__dict__, merge=True)
+
+def update_model_result(model_data, request_id, status, result = "NA"):
+	doc_ref = db.collection(u'requests').document(request_id)
+	req = UpdateRequestsModel(model_data = model_data, status=status, result = result)
 	doc_ref.set(req.__dict__, merge=True)
 
 def query_request_data(request_id):
