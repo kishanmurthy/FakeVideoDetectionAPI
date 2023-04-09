@@ -2,6 +2,7 @@ import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
 
+
 cred = credentials.Certificate('deepfakedetection-2b199-firebase-adminsdk-oj5r5-1d5e59f012.json')
 app = firebase_admin.initialize_app(cred)
 db = firestore.client()
